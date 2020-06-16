@@ -1,0 +1,62 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<p>
+    <a asp-page="ImgUpload">上传</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                图片名称
+            </th>
+            <th>图片描述</th>
+            <th>
+            </th>
+            <th>PA</th>
+            <th>UA</th>
+            <th>状态</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ImageList)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImgName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <div class="thumbnail">
+                    <a href="#">
+                        <img src="@Model.SiteUrl@item.ImgName" alt="缩略图" width="50" height="50">
+                    </a>
+                </div>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UA)
+            </td>
+                @if (item.Deleted)
+                {
+                <td>禁用</td>
+            }
+            else
+            {
+                <td>启用</td>
+            }
+                <td>
+                    <a asp-page="./ImgDelete" asp-route-id="@item.Id">编辑</a>
+                    <a asp-page="./IPDetails" asp-route-id="@item.Id">查看详情</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

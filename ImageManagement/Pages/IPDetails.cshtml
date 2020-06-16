@@ -1,0 +1,78 @@
+﻿@page
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Common;
+@model IPDetailsModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                IP
+            </th>
+            <th>
+                UserAgent
+            </th>
+            <th>创建时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.UserInfos)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ip)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserAgent)
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDate)
+            </td>
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="text-muted" colspan="4">
+                每页 @Model.PageSize 条记录，本页有 @Model.Count 条记录,共有 @Model.TotalItemCount 条记录。第 @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) 页，共 @Model.PageCount 页。
+                @*这个条件表达式的目的是防止出现 记录为0的情况，会出现 总页数为0，而当前是第1页的情况。*@
+            </td>
+        </tr>
+    </tfoot>
+</table>
+@Html.PagedListPager(Model.UserInfos, pageIndex => Url.Action("IPDetails", new { pageIndex, pageSize = Model.PageSize,id=Model.UserInfos[0]?.Image.Id }),
+new PagedListRenderOptions
+{
+LinkToFirstPageFormat = "首页",
+LinkToNextPageFormat = "下一页",
+LinkToPreviousPageFormat = "上一页",
+LinkToLastPageFormat = "末页",
+MaximumPageNumbersToDisplay = 5,
+DisplayItemSliceAndTotal = false//从头到尾显示页码
+}
+)
+<table class="table" style="width:50%">
+    <thead>
+        <tr>
+            <th style="border:none">
+                IP
+            </th>
+            <th style="border:none">
+               访问次数
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.IPList)
+        {
+            <tr>
+                <td style="border:none">
+                    @Html.DisplayFor(modelItem => item.IP)
+                </td>
+                <td style="border:none">
+                    @Html.DisplayFor(modelItem => item.Count)
+            </tr>
+        }
+    </tbody>
+</table>
